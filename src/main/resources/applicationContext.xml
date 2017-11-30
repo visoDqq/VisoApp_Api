@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:property-placeholder location="classpath:db.properties"/>
+    
+    <context:component-scan base-package="com.wz.VisoApp.appService">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <!-- MySQL -->
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- session工厂 -->
+    <bean id="sessionFactory" name="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.wz.VisoApp.model.entity"/>
+        <property name="namingStrategy">
+            <bean class="org.hibernate.cfg.ImprovedNamingStrategy"></bean>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="connection.provider_class">org.hibernate.c3p0.internal.C3P0ConnectionProvider</prop>
+                <prop key="hibernate.c3p0.max_size">300</prop>
+                <prop key="hibernate.c3p0.min_size">30</prop>
+                <prop key="hibernate.c3p0.timeout">1800</prop>
+                <prop key="hibernate.c3p0.max_statements">0</prop>
+                <prop key="hibernate.c3p0.acquire_increment">2</prop>
+                <prop key="hibernate.c3p0.idle_test_period">180</prop>
+                <prop key="hibernate.c3p0.automaticTestTable">Test</prop>
+                <prop key="hibernate.c3p0.acquireRetryAttempts">5</prop>
+                <prop key="hibernate.c3p0.acquireRetryDelay">1000</prop>
+                <prop key="hibernate.c3p0.autoCommitOnClose">false</prop>
+                <prop key="hibernate.c3p0.unreturnedConnectionTimeout">180</prop>
+                <!--<property name="hibernate.c3p0.debugUnreturnedConnectionStackTraces">true</property>-->
+                <prop key="hibernate.c3p0.checkoutTimeout">1800</prop>
+                <!--协调器-->
+                <prop key="hibernate.c3p0.numHelperThreads">200</prop>
+                <prop key="hibernate.c3p0.maxAdministrativeTaskTime">100</prop>
+
+                <prop key="jdbc.fetch_size">50</prop>
+                <prop key="jdbc.batch_size">30</prop>
+                <prop key="jdbc.use_scrollable_resultset">true</prop>
+                <prop key="Connection.useUnicode">true</prop>
+                <prop key="connection.characterEncoding">utf-8</prop>
+                <prop key="current_session_context_class">jta</prop>
+
+                <prop key="connection.useUnicode">true</prop>
+                <prop key="connection.characterEncoding">UTF-8</prop>
+
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <!--<prop key="hibernate.hbm2ddl.auto">validate</prop>-->
+                <prop key="hibernate.connection.autocommit">true</prop>
+                <prop key="hibernate.transaction.manager_lookup_class">
+                    org.springframework.orm.hibernate4.SpringSessionContext
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+</beans>
