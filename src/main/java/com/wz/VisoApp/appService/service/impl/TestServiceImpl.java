@@ -30,6 +30,7 @@ public class TestServiceImpl implements TestService{
 
     @Override
     public Test getEntityById(String id) throws Exception {
+        System.out.println("==="+id);
         return testDao.getEntityById(id,Test.class);
     }
 }
