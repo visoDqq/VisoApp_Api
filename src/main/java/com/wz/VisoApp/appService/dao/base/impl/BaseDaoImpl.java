@@ -1,6 +1,7 @@
 package com.wz.VisoApp.appService.dao.base.impl;
 
 import com.wz.VisoApp.appService.dao.base.BaseDao;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import javax.annotation.Resource;
@@ -13,6 +14,13 @@ public class BaseDaoImpl implements BaseDao{
     @Resource
     private SessionFactory sessionFactory;
 
+    protected Session getCurrentSession(){
+        return sessionFactory.getCurrentSession();
+    }
+
+    protected Session getNewSession(){
+        return sessionFactory.openSession();
+    }
 
     @Override
     public <T> void saveEntity(T t) throws Exception {

@@ -13,4 +13,6 @@ public interface TestService {
     void updateEntity(Test test)throws Exception;
 
     Test getEntityById(String id)throws Exception;
+
+    int updateList();
 }

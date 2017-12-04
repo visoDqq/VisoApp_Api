@@ -62,6 +62,13 @@ public class TestCtrl {
         return new ResultBean<Test>(test1);
     }
 
+    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
+    public ResultBean<Test> test4(){
+        Test test1 = new Test();
+        testService.updateList();
+        return new ResultBean<Test>();
+    }
+
 
     public static void main(String[] args) {
         TestCtrl controllerAop = new TestCtrl();

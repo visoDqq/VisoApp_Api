@@ -45,4 +45,19 @@
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <filter>
+        <filter-name>test</filter-name>
+        <filter-class>com.wz.VisoApp.appService.filter.TestFilter</filter-class>
+        <init-param>
+            <param-name>myname</param-name>
+            <param-value>124</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>test</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>
