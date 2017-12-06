@@ -5,6 +5,7 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:beans="http://www.springframework.org/schema/beans"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
@@ -12,11 +13,13 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/aop
-       http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/data/mongo
+       http://www.springframework.org/schema/data/mongo/spring-mongo-1.8.xsd ">
 
     <context:property-placeholder location="classpath:db.properties"/>
     <context:property-placeholder location="classpath:config.properties"/>
-    
+
     <context:component-scan base-package="com.wz.VisoApp.appService">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
@@ -85,4 +88,16 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <mongo:mongo id="mongo" replica-set="${mongo.replica.set.address}">
+    </mongo:mongo>
+    <mongo:db-factory id="dbFactory" dbname="test" mongo-ref="mongo"/>
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="dbFactory"></constructor-arg>
+    </bean>
+
+    <mongo:db-factory id="gridfsFactory" client-uri="mongodb://${mongo.replica.set.address}/${gridfs.mongo.db}"/>
+    <mongo:mapping-converter id="converter" db-factory-ref="gridfsFactory"/>
+    <mongo:gridFsTemplate db-factory-ref="gridfsFactory" converter-ref="converter"/>
+
 </beans>
