@@ -34,7 +34,7 @@
 
     <aop:config>
         <aop:aspect id="aspectId" ref="controllerAop">
-            <aop:pointcut id="target" expression="execution(* com.wz.VisoApp.appService.controller.*.*(..))"/>
+            <aop:pointcut id="target" expression="execution(* com.wz.VisoApp.appService.controller..*.*(..))"/>
             <aop:around method="handlerControllerMethod" pointcut-ref="target"/>
         </aop:aspect>
     </aop:config>
