@@ -57,7 +57,8 @@ public class TestCtrl {
         return test;
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+//    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @GetMapping
     public ResultBean<Test> test2(){
         Test test1 = new Test();
         try {
